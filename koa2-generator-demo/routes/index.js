@@ -6,14 +6,16 @@ router.get('/', async (ctx, next) => {
   })
 })
 
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
+router.get('/charts', async (ctx, next) => {
+  await ctx.render('charts', {
+    title: 'Hello Koa 2!'
+  })
 })
 
-router.get('/json', async (ctx, next) => {
-  ctx.body = {
-    title: 'koa2 json'
-  }
+router.get('/tables', async (ctx, next) => {
+  await ctx.render('tables', {
+    title: 'Hello Koa 2!'
+  })
 })
 
 module.exports = router
