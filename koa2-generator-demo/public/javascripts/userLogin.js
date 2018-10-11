@@ -7,15 +7,11 @@ function login(){
     inputPassword = $("#inputPassword").val();
     $.ajax({
          url: "/userLogin",
-         data: {"inputUsername":inputUsername,"inputPassword":inputPassword},
+         data: {"username":inputUsername,"password":inputPassword},
          dataType:"JSON",
          type:'POST', 
          success: function(res){
-            if(res.code==1){
-                window.location.href = '/index';
-            }else{
-                window.location.href = '/404';
-            }
+            console.log(res);
         } 
     });
 }

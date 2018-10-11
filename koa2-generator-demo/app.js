@@ -18,13 +18,23 @@ const login = require('./routes/login')
 // error handler
 onerror(app)
 
-// middlewares
+// middlewares 中间件
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
+
+
+// logger 日志中间件
+app.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+})
+
 
 //初始为ejs模板
 app.use(views(__dirname + '/views', {
@@ -43,18 +53,13 @@ const CONFIG = {
    renew: false,  //(boolean) renew session when session is nearly expired,
 };
 app.use(session(CONFIG, app));
-//passport
+
+//passport 权限拦截中间件
 app.use(passport.initialize())
 app.use(passport.session())
 
 
-// logger
-app.use(async (ctx, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+
 
 
 // routes

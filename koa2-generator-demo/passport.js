@@ -1,29 +1,26 @@
 // passport.js
-const passport = require('koa-passport')
-var LocalStrategy = require('passport-local').Strategy
+const passport = require('koa-passport'),LocalStrategy = require('passport-local').Strategy
 
 
-// 序列化ctx.login()触发
-passport.serializeUser(function(user, done) {
-  console.log('serializeUser: ', user)
-  done(null, user.id)
-})
-// 反序列化（请求时，session中存在"passport":{"user":"1"}触发）
-passport.deserializeUser(async function(id, done) {
-  console.log('deserializeUser: ', id)
-  var user = {id: 1, username: 'admin', password: '123456'}
-  done(null, user)
-})
-// 提交数据(策略)
+// 策略
 passport.use(new LocalStrategy({
   // usernameField: 'email',
   // passwordField: 'passwd'
 }, function(username, password, done) {
-  console.log('LocalStrategy', username, password)
   var user = {id: 1, username: username, password: password}
-  done(null, user, {msg: 'this is a test'})
-  // done(err, user, info)
+  done(null,user)
 }))
+
+// serializeUser 在用户登录验证成功以后将会把用户的数据存储到 session 中
+passport.serializeUser(function (user, done) {
+  done(null,user)
+})
+
+// deserializeUser 在每次请求的时候将从 session 中读取用户对象
+passport.deserializeUser(function (user, done) {
+  return done(null,user)
+})
+
 
 
 module.exports = passport
